@@ -1,0 +1,6 @@
+# Ignore unnecessary files and directories
+bin/
+obj/
+.vscode/
+*.log
+*.tmp

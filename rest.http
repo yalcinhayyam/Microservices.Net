@@ -1,0 +1,13 @@
+###
+GET http://localhost:5259/event
+
+###
+GET http://localhost:5109/event
+
+
+
+###
+GET http://localhost:5001/event
+
+###
+GET http://localhost:5002/event
