@@ -2,6 +2,31 @@
 GET http://localhost:5259/event
 
 ###
+GET http://localhost:5259/products
+
+
+###
+POST http://localhost:5259/products
+Content-Type: application/json
+
+{
+    "title":"Patates",
+    "stock" : {
+        "amount":100,
+        "type" : 0
+    },
+    "prices": [
+        {
+            "currency":0,
+            "amount": 22.5
+        }
+    ]
+
+
+}
+
+
+###
 GET http://localhost:5109/event
 
 

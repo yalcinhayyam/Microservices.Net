@@ -11,34 +11,35 @@ services:
       - "5672:5672"
       - "15672:15672"
 
-  subscriber:
-    container_name: subscriber
-    build:
-      context: .
-      dockerfile: Subscriber/Dockerfile
-    depends_on:
-      - rabbitmq
+  # subscriber:
+  #   container_name: subscriber
+  #   restart: always
+  #   build:
+  #     context: .
+  #     dockerfile: Subscriber/Dockerfile
+  #   depends_on:
+  #     - rabbitmq
 
-  catalogue:
-    container_name: catalogue-service
-    build:
-      context: .
-      dockerfile: Catalogue/Dockerfile
-    ports:
-      - "5001:80"
-    depends_on:
-      - rabbitmq
+  # catalogue:
+  #   container_name: catalogue-service
+  #   build:
+  #     context: .
+  #     dockerfile: Catalogue/Dockerfile
+  #   ports:
+  #     - "5001:80"
+  #   depends_on:
+  #     - rabbitmq
 
 
-  ordering:
-    container_name: ordering-service
-    build:
-      context: .
-      dockerfile: Catalogue/Dockerfile
-    ports:
-      - "5002:80"
-    depends_on:
-      - rabbitmq
+  # ordering:
+  #   container_name: ordering-service
+  #   build:
+  #     context: .
+  #     dockerfile: Ordering/Dockerfile
+  #   ports:
+  #     - "5002:80"
+  #   depends_on:
+  #     - rabbitmq
 
 
 

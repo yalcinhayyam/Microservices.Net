@@ -12,7 +12,7 @@ activator.Register(() => new ExampleIntegrationEventHandler());
 
 
 var subscriber = Configure.With(activator)
-    .Transport(t => t.UseRabbitMq("amqp://guest:guest@localhost:5672", "Microservices-Test"))
+    .Transport(t => t.UseRabbitMq("amqp://guest:guest@rabbitmq:5672", "Microservices-Test"))
     .Start();
 await subscriber.Subscribe<ExampleIntegrationEvent>();
 Console.ReadLine();

@@ -11,12 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 {
     var services = builder.Services;
     services.Configure<EventBusOptions>(builder.Configuration.GetSection("EventBusOptions"));
-
+    
     var configuration = builder.Configuration;
 
     services.RegisterRebus(
         onCreated: async (bus) =>
         {
+            await bus.Advanced.Topics.Publish();
+            await bus.Advanced.Topics.Subscribe("test-topic");
             await bus.Subscribe<ExampleIntegrationEvent>();
 
         }
@@ -31,6 +33,8 @@ app.MapGet("/event", (IBus bus) =>
     bus.Publish(new ExampleIntegrationEvent { Value = "Hello World" });
     return "Event Sended";
 });
+
+
 
 app.Run();
 
