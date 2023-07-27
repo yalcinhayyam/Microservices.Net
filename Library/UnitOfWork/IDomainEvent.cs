@@ -1,3 +1,5 @@
+using MediatR;
+
 namespace Library.UnitOfWork;
 
-public interface IDomainEvent { }
+public interface IDomainEvent: INotification {}

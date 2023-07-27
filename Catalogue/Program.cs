@@ -7,6 +7,7 @@ using Catalogue.Models;
 using Microsoft.AspNetCore.Mvc;
 using Catalogue.Mappings;
 using MapsterMapper;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,12 +17,19 @@ var builder = WebApplication.CreateBuilder(args);
     services.AddDbContext<ApplicationDbContext>();
     services.Configure<EventBusOptions>(builder.Configuration.GetSection("EventBusOptions"));
     services.AddMapping();
-
-
+    services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+    services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    }));
     var configuration = builder.Configuration;
 
     services.RegisterRebus();
 }
+
+
 
 var app = builder.Build();
 
@@ -33,22 +41,36 @@ app.MapGet("/event", (IBus bus) =>
 });
 
 
-app.MapPost("/products", (ApplicationDbContext context, IDateTimeProvider dateTimeProvider, IMapper mapper, [FromBody] ProductInputModel model) =>
-{
-    // var product = Product.Create(model.Title, model.Stock, dateTimeProvider.UtcNow);
+app.MapPost("/products",
+        async (ISender madiator, IMapper mapper, [FromBody] ProductInputModel model) =>
+        {
 
-    var product = mapper.Map<Product>(model);
-    // model.Prices.ToList().ForEach(price => product.AddPrice(price));
+            var result = await madiator.Send(mapper.Map<CreateProductCommand>(model));
+            if (!result.IsSuccess)
+                return Results.BadRequest(result.Error);
+            return Results.Json(result.Value);
 
-    var result = context.Products.Add(product);
-    context.SaveChanges();
-    return mapper.Map<ProductPayloadModel>(result.Entity);
-});
-
+        }
+    );
 
 app.MapGet("/products", (ApplicationDbContext context, IMapper mapper) =>
 {
     return context.Products.Select(product => mapper.Map<ProductPayloadModel>(product)).ToList();
 });
 
+app.MapGet("/user", (ApplicationDbContext context, IMapper mapper) =>
+{
+
+    context.Users.Add(new User { Email = "Demo Email" });
+    context.SaveChanges();
+
+    var UserResult = context.Users.ToList();
+    var UserViewresult = context.UserViews.ToList();
+
+    return new { UserResult, UserViewresult };
+});
+
+app.UseCors("MyPolicy");
 app.Run();
+
+

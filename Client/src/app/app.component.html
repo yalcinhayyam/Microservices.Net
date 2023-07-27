@@ -1,0 +1,21 @@
+<!-- <ul>
+  <li *ngFor="let name of nameList$ | async">
+      {{name}}
+  </li>
+</ul> -->
+<h1>Value is {{ Service.value$ | async }}</h1>
+
+<app-couneter></app-couneter>
+
+
+<div *ngIf="products">
+  <ul>
+    <li *ngFor="let product of products">
+      <h3>{{ product.id }}</h3>
+      <h4>{{ product.title }}</h4>
+    </li>
+  </ul>
+</div>
+
+<input #value type="number" />
+<button (click)="increase(+value.value)">Increase</button>

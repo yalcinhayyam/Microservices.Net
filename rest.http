@@ -1,6 +1,9 @@
 ###
 GET http://localhost:5259/event
 
+
+###
+GET http://localhost:5259/user
 ###
 GET http://localhost:5259/products
 
@@ -12,17 +15,15 @@ Content-Type: application/json
 {
     "title":"Patates",
     "stock" : {
-        "amount":100,
-        "type" : 0
+        "amount":100.0,
+        "unitType" : 0
     },
     "prices": [
         {
-            "currency":0,
+            "currencyType":0,
             "amount": 22.5
         }
     ]
-
-
 }
 
 

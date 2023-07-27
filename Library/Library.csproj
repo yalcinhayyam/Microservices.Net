@@ -12,5 +12,6 @@
     <PackageReference Include="Rebus.RabbitMq" Version="8.0.0" />
     <PackageReference Include="Rebus.Serilog" Version="7.0.0" />
     <PackageReference Include="Rebus.ServiceProvider" Version="9.0.0" />
+    <PackageReference Include="Mediatr" Version="12.1.1" />
   </ItemGroup>
 </Project>

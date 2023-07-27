@@ -2,8 +2,8 @@
 namespace Library.UnitOfWork;
 public class Entity : IHasDomainEvent
 {
-    public int Id { get; protected set; }
-    public DateTime DateOfCreate { get; protected set; }
+    public Guid Id { get; private set; }
+    public DateTime CreatedAt { get; private set; }
 
     private readonly ICollection<IDomainEvent> domainEvents = new List<IDomainEvent>();
     public IReadOnlyCollection<IDomainEvent> DomainEvents => domainEvents.ToList().AsReadOnly();
@@ -12,10 +12,21 @@ public class Entity : IHasDomainEvent
     {
     }
 
-    protected Entity(int id) : this()
+    protected Entity(Guid id) : this()
     {
         Id = id;
 
+    }
+
+    protected Entity(Guid id, DateTime createdAt) : this()
+    {
+        Id = id;
+        CreatedAt = createdAt;
+    }
+
+    public void Created(DateTime createdAdt)
+    {
+        CreatedAt = createdAdt;
     }
 
     public void ClearDomainEvents()

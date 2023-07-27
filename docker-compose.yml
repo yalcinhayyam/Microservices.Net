@@ -11,6 +11,22 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+  db:
+    image: mcr.microsoft.com/azure-sql-edge
+    container_name: mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Secret-Cat
+    ports:
+      - "1433:1433"
+    cap_add:
+      - SYS_PTRACE
+    # volumes:
+    #   - ./data:/var/opt/mssql/data
+    #   - ./log:/var/opt/mssql/log
+    #   - ./secrets:/var/opt/mssql/secrets
+
+
   # subscriber:
   #   container_name: subscriber
   #   restart: always

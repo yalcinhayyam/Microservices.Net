@@ -1,54 +1,56 @@
+using Catalogue.Contexts;
 using Catalogue.Models;
+using Catalogue.Models.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Catalogue.Configurations;
 
 
 
-public sealed class ProductConfiguration : IEntityTypeConfiguration<Product>
+public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
         builder.HasKey(p => p.Id);
 
+        builder.ToTable(nameof(ApplicationDbContext.Products));
+
+        builder.Property(p => p.Id).HasColumnName(nameof(Product.Id));
+
         builder.Property(p => p.Title)
                .IsRequired()
-               .HasMaxLength(100);
-        // builder.Ignore(p => p.Prices);
+               .HasMaxLength(100).HasColumnName(nameof(Product.Title));
+
+
         builder.OwnsMany(p => p.Prices, pricesBuilder =>
         {
-            pricesBuilder.Property(p => p.Amount)
-                       .IsRequired();
-            pricesBuilder.Property<int>(p => (int)p.CurrencyType)
+            pricesBuilder.ToTable("Money");
+
+            pricesBuilder.WithOwner().HasForeignKey("ProductId");
+            pricesBuilder.Property<Guid>("Id");
+            pricesBuilder.HasKey("Id");
+
+            pricesBuilder.Property<decimal>(p => p.Amount)
+                        .HasColumnName(nameof(Money.Amount))
+                        .IsRequired();
+
+            pricesBuilder.Property<int>(p => (int)
+                p.CurrencyType)
+                         .HasColumnName(nameof(Money.CurrencyType))
                          .IsRequired();
         });
 
         builder.OwnsOne(p => p.Stock, stockBuilder =>
         {
-            // stockBuilder.WithOwner().HasForeignKey("StockId");
-            stockBuilder.Property(s => s.Type)
-                         .IsRequired().HasConversion<string>();
+            stockBuilder.Property(s => s.UnitType)
+                .HasColumnName($"{nameof(Product.Stock)}_{nameof(ProductUnit.UnitType)}")
+                .IsRequired()
+                .HasConversion<string>();
+
             stockBuilder.Property(s => s.Amount)
-                         .IsRequired();
+                .HasColumnName($"{nameof(Product.Stock)}_{nameof(ProductUnit.Amount)}")
+                .IsRequired();
+
         });
-
-
-
-    //     modelBuilder.Entity<Post>().OwnsOne(p => p.AuthorName).HasData(
-    // // new { PostId = 1, First = "Andriy", Last = "Svyryd" },
-    // // new { PostId = 2, First = "Diego", Last = "Vega" });
-    //     modelBuilder.Entity<Product>(
-    //         p => p.
-    //     ).HasData(
-
-    //        new List<Product>(){
-    //             Product.Create("Armut",new(200,UnitType.Kg),dateTimeProvider.UtcNow).AddPrice(new(Currencies.TL,22.5m)),
-    //             Product.Create("Ananas",new(50,UnitType.Piece),dateTimeProvider.UtcNow).AddPrice(new(Currencies.TL,30m)),
-    //             Product.Create("Hacı Şakir",new(200,UnitType.Box),dateTimeProvider.UtcNow).AddPrice(new(Currencies.TL,52.6m)),
-    //             Product.Create("Gül Suyu",new(80,UnitType.Litre),dateTimeProvider.UtcNow).AddPrice(new(Currencies.TL,160.8m)),
-    //        }
-    //  );
-
-
     }
 }

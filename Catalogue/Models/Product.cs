@@ -1,29 +1,28 @@
 
 
+using Catalogue.Models.ValueObjects;
 using Library.UnitOfWork;
 
 namespace Catalogue.Models;
 
 
+public sealed record ProductInputModel(string Title, ICollection<Money> Prices, ProductUnit Stock);
+public sealed record ProductPayloadModel(Guid Id, string Title, IReadOnlyCollection<Money> Prices, ProductUnit Stock);
 
-public record ProductInputModel(string Title, ICollection<Money> Prices, Unit Stock);
-public record ProductPayloadModel(Guid Id, string Title, IReadOnlyCollection<Money> Prices, Unit Stock);
-
-public sealed class Product : Entity
+public class Product : Entity
 {
-    public Guid Id { get; private set; }
-    public string Title { get; private set; }
-    public ICollection<Money> Prices { get; private set; }
-    public Unit Stock { get; private set; }
+    public string Title { get; protected set; }
+    public ICollection<Money> Prices { get; protected set; }
+    public ProductUnit Stock { get; protected set; }
 
-    private Product() { }
-    
-    public Product(Guid id, string title, Unit stock, DateTime dateOfCreate)
+
+    protected Product() { }
+
+    public Product(Guid id, string title, ProductUnit stock, DateTime createdAt) : base(id, createdAt)
     {
-        Id = id;
+
         Title = title;
         Stock = stock;
-        DateOfCreate = dateOfCreate;
         Prices = new HashSet<Money>();
     }
 
@@ -32,7 +31,7 @@ public sealed class Product : Entity
         Prices.Add(money);
         return this;
     }
-    public static Product Create(string title, Unit stock, DateTime dateOfCreate)
+    public static Product Create(string title, ProductUnit stock, DateTime dateOfCreate)
         => new(Guid.NewGuid(), title, stock, dateOfCreate);
 
     public Product ChangePrice(Money price)
