@@ -12,7 +12,11 @@ public sealed class ExceptionHandlingMiddleware : IMiddleware
 {
     private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
-    public ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger) => _logger = logger;
+    public ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger)
+    {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));    
+
+    }
 
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {

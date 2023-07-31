@@ -14,12 +14,14 @@ using Rebus.Config;
 using Microsoft.Extensions.Options;
 using Rebus.Routing.TypeBased;
 using Contracts.Ordering;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 {
     var services = builder.Services;
     services.RegisterCoreServices();
+    services.AddLogging();
     services.RegisterApplicationServices();
     services.RegisterPersistence();
     services.Configure<EventBusOptions>(builder.Configuration.GetSection("EventBusOptions"));
@@ -35,7 +37,7 @@ var builder = WebApplication.CreateBuilder(args);
             }, onCreated: async (IBus bus) =>
             {
                 await bus.Advanced.Topics.Subscribe(OrderingEventNames.OrderCreated);
-            });
+            }).AutoRegisterHandlersFromAssembly(typeof(ApplicationExtensions).Assembly);
 
 
     services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
@@ -51,7 +53,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 var app = builder.Build();
-app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+using (var serviceScope = app.Services.GetService<IServiceScopeFactory>().CreateScope())
+{
+    var context = serviceScope.ServiceProvider.GetRequiredService<CatalogueDbContext>();
+    context.Database.Migrate();
+}
+
+// app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 
 // app.MapGet("/event", (IBus bus) =>
 // {

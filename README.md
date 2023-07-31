@@ -16,4 +16,8 @@
 
     dotnet ef database drop
     dotnet ef migrations remove
+
+
+    Microservices.Net\Services\Catalogue\Catalogue.Api> dotnet ef migrations add InitialCreate --project ../Catalogue.Persistence
+    Microservices.Net\Services\Catalogue\Catalogue.Api> dotnet ef database update            
 ```

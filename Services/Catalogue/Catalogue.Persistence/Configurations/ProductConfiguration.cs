@@ -1,4 +1,5 @@
 using Catalogue.Domain;
+using Catalogue.Domain.ValueObjects;
 using Catalogue.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -14,7 +15,14 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
 
         builder.ToTable(nameof(CatalogueDbContext.Products));
+        var productIdConverter = new ValueConverter<ProductId, Guid>(
+                    id => id.Value,
+                    id => new(id)
+                );
+        builder.Property(o => o.Id)
+          .HasConversion(productIdConverter);
 
+        builder.HasKey(p => p.Id);
         builder.Property(p => p.Title)
                .HasMaxLength(100).HasColumnName(nameof(Product.Title));
 

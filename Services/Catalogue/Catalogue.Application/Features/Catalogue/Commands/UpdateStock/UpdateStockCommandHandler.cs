@@ -32,7 +32,7 @@ public sealed record UpdateStockCommand(Guid OrderId,IReadOnlyCollection<OrderIt
             await context.BeginTransactionAsync(cancellationToken);
             foreach (var item in request.OrderItems)
             {
-                var product = await context.Products.FindAsync(item.ProductId);
+                var product = context.Products.AsEnumerable().FirstOrDefault(p=> p.Id.Value == item.ProductId);
                 if (product is null)
                 {
                     await context.RollbackTransactionAsync(cancellationToken);

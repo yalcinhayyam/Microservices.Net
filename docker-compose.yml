@@ -10,6 +10,7 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    restart: always
 
   db:
     image: mcr.microsoft.com/azure-sql-edge
@@ -21,41 +22,38 @@ services:
       - "1433:1433"
     cap_add:
       - SYS_PTRACE
+    restart: always
     # volumes:
     #   - ./data:/var/opt/mssql/data
     #   - ./log:/var/opt/mssql/log
     #   - ./secrets:/var/opt/mssql/secrets
 
 
-  # subscriber:
-  #   container_name: subscriber
-  #   restart: always
-  #   build:
-  #     context: .
-  #     dockerfile: Subscriber/Dockerfile
-  #   depends_on:
-  #     - rabbitmq
 
-  # catalogue:
-  #   container_name: catalogue-service
-  #   build:
-  #     context: .
-  #     dockerfile: Catalogue/Dockerfile
-  #   ports:
-  #     - "5001:80"
-  #   depends_on:
-  #     - rabbitmq
+  catalogue:
+    container_name: catalogue-service
+    build:
+      context: .
+      dockerfile: Services/Catalogue/Catalogue.Api/Dockerfile
+    ports:
+      - "5001:80"
+    depends_on:
+      - rabbitmq
+      - db
+    restart: always
 
 
-  # ordering:
-  #   container_name: ordering-service
-  #   build:
-  #     context: .
-  #     dockerfile: Ordering/Dockerfile
-  #   ports:
-  #     - "5002:80"
-  #   depends_on:
-  #     - rabbitmq
+  ordering:
+    container_name: ordering-service
+    build:
+      context: .
+      dockerfile: Services/Ordering/Ordering.Api/Dockerfile
+    ports:
+      - "5002:80"
+    depends_on:
+      - rabbitmq
+      - db
+    restart: always
 
 
 

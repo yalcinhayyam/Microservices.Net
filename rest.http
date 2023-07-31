@@ -9,16 +9,26 @@ GET http://localhost:5259/user
 ###
 GET http://localhost:5259/products
 
+
 ###
-POST http://localhost:5259/products
+GET http://localhost:5002/create-order
+Content-Type: application/json
+
+{
+    "orderItems" : [{
+        "productId": "98819770-0186-4ccc-9653-bb0a896b4064",
+        "amount": 40.5
+    }]
+}
+
+###
+POST http://localhost:5001/products
 Content-Type: application/json
 
 {
     "title":"Patates",
-    "stock" : {
-        "amount":100.0,
-        "unitType" : 0
-    },
+    "stockAmount":100.0,
+    "unitType" : 1,
     "prices": [
         {
             "currencyType":0,

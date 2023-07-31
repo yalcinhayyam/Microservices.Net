@@ -25,10 +25,10 @@ public sealed record CreateProductCommand(string Title, ICollection<Money> Price
 
         public CreateProductCommandHandler(IProductRepository repository, IDateTimeProvider dateTimeProvider, IMapper mapper, IPublisher publisher)
         {
-            this.repository = repository;
-            this.dateTimeProvider = dateTimeProvider;
-            this.mapper = mapper;
-            this.publisher = publisher;
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.dateTimeProvider = dateTimeProvider ?? throw new ArgumentNullException(nameof(dateTimeProvider));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            this.publisher = publisher ?? throw new ArgumentNullException(nameof(publisher));
         }
 
 

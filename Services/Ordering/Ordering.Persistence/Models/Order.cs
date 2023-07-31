@@ -1,24 +1,61 @@
 using Contracts.Ordering.ValueObjects;
+using Core.Common;
 using Core.Common.Domain;
 using Ordering.Persistence.Models.Enums;
 using Ordering.Persistence.Models.ValueObjects;
 
 
 namespace Ordering.Persistence.Models;
+public sealed record OrderNumber
+{
 
+    public string Value { get; init; }
+    public OrderNumber(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            throw new ArgumentNullException(nameof(value));
+        }
+        if (value.Length != 12)
+        {
+            throw new ArgumentException("Order number must 6 digit alphanumeric", nameof(value));
+        }
+        Value = value;
+    }
+}
+
+public sealed record OrderDomainError(string Message) : Error(Message);
 public sealed class Order : Entity<OrderId>, IRoot
 {
-    private readonly ICollection<OrderItem> items;
     public IReadOnlyCollection<OrderItem> Items => items.ToList().AsReadOnly();
-    public OrderStatus status { get; set; }
+    private readonly ICollection<OrderItem> items;
+    public OrderStatus Status { get; private set; }
+    public OrderNumber OrderNumber { get; private set; }
 
-    public Order(OrderId id, ICollection<OrderItem> items, DateTime createdAt) : base(id, createdAt)
+    public Order()
     {
         items = new HashSet<OrderItem>();
     }
 
-    public Order Create(ICollection<OrderItem> items, DateTime createdAt)
-        => new(new(Guid.NewGuid()), items, createdAt);
+    public Order(OrderId id, OrderNumber orderNumber, ICollection<OrderItem> items, OrderStatus status, DateTime createdAt) : base(id, createdAt)
+    {
+        this.items = items;
+        this.Status = status;
+        this.OrderNumber = orderNumber;
+
+    }
+
+    public static Result<Order> Create(ICollection<OrderItem> items, OrderStatus status, DateTime createdAt)
+    {
+
+        if (!items.Any())
+        {
+            return new OrderDomainError("Order itmes must contain least 1 item!");
+        }
+
+        var key = new Random().Next(100000, 999999);
+        return new Order(new(Guid.NewGuid()), new($"ORDER_{key}"), items, status, createdAt);
+    }
 
 
 

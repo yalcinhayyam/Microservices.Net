@@ -2,7 +2,6 @@
 using Catalogue.Application.Abstraction.Contexts;
 using Catalogue.Application.Abstraction.Repositories;
 using Catalogue.Domain;
-using Catalogue.Persistence.Contexts;
 
 namespace Catalogue.Persistence.Repositories;
 
