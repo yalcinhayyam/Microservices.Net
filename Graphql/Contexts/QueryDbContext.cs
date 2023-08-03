@@ -1,15 +1,13 @@
 using System.Reflection;
-using Catalogue.Configurations;
-using Catalogue.Models;
-using Catalogue.Models.Entities;
-using Library.UnitOfWork;
+using Core.Common.Services;
+using Graphql.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Catalogue.Contexts;
 
 public class QueryDbContext : DbContext
 {
-    public DbSet<ProductQuery> Products { get; set; }
+    public DbSet<Product> Products { get; set; }
 
     private readonly IConfiguration configuration;
     private readonly IDateTimeProvider dateTimeProvider;
@@ -22,7 +20,6 @@ public class QueryDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.EnableSensitiveDataLogging();
-
         optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
     }
 

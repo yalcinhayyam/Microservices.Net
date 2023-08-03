@@ -1,25 +1,67 @@
+using Graphql.Models;
+using Shared.Common.Enums;
+using Shared.Common.ValueObjects;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<Query>();
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+app.MapGraphQL();
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
-app.MapControllers();
 
 app.Run();
+
+
+public class Book
+{
+    public string Title { get; set; }
+
+    public Author Author { get; set; }
+}
+
+public enum UserRole
+{
+    GUEST,
+    DEFAULT,
+    ADMINISTRATOR
+}
+
+public class Author
+{
+    public UserRole Role { get; set; }
+    public string Name { get; set; }
+}
+
+public class Query
+{
+    public Product GetProdut() =>
+    new Product
+    {
+        CreateAt = DateTime.Now,
+        Title = "Patates",
+        Id = Guid.NewGuid(),
+        Prices = new List<Money> { new(Currencies.TL, 20.4m) },
+        StockAmount = 200m,
+        StockUnit = UnitType.Kg,
+    };
+
+    public Book GetBook() =>
+        new Book
+        {
+            Title = "C# in depth.",
+            Author = new Author
+            {
+
+                Name = "Jon Skeet"
+            }
+        };
+}
