@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "Grpc";
+
+package product;
+
+service Products {
+    rpc Products (ProductsRequest) returns (ProductsReply);
+}
+
+message ProductsRequest {
+    
+}
+
+message ProductsReply{
+    string title =1;
+}

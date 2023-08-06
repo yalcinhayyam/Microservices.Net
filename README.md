@@ -1,6 +1,7 @@
 ```sh
     dotnet new sln
     dotnet sln add (ls -r **/*.csproj)
+    dotnet sln add $(ls -r **/*.csproj) for linux mac
     dotnet new classlib -n Library
 
     dotnet add Catalogue reference Library

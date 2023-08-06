@@ -46,7 +46,6 @@ var builder = WebApplication.CreateBuilder(args);
                .AllowAnyMethod()
                .AllowAnyHeader();
     }));
-
     var configuration = builder.Configuration;
 }
 
@@ -112,21 +111,6 @@ app.Run();
 // });
 
 
-// Graphql
-// Contracts
-// EventBus
-// Logging
-// Validation Behaviors (Clean Architecture solution)
-// Fluent Validattion  (Exception Handling Middleware on startup)
-// ServiceRegistration katmansal dependency çöplüğü
-// Sql Views ?
-// Docker compose 
-// Aplly assembly from context 
-// IEntity , Aggregate root
-// ValueObjects Contracts
-// Api Gateway
-// Fluent Assertion ? 
-// Mail Service
 
 
 
