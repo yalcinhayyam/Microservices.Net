@@ -1,4 +1,3 @@
-using Contracts.Ordering.ValueObjects;
 using Core.Common;
 using Core.Common.Domain;
 using Ordering.Persistence.Models.Enums;
@@ -27,17 +26,17 @@ public sealed record OrderNumber
 public sealed record OrderDomainError(string Message) : Error(Message);
 public sealed class Order : Entity<OrderId>, IRoot
 {
-    public IReadOnlyCollection<OrderItem> Items => items.ToList().AsReadOnly();
-    private readonly ICollection<OrderItem> items;
+    public IReadOnlyCollection<ValueObjects.OrderItem> Items => items.ToList().AsReadOnly();
+    private readonly ICollection<ValueObjects.OrderItem> items;
     public OrderStatus Status { get; private set; }
     public OrderNumber OrderNumber { get; private set; }
 
     public Order()
     {
-        items = new HashSet<OrderItem>();
+        items = new HashSet<ValueObjects.OrderItem>();
     }
 
-    public Order(OrderId id, OrderNumber orderNumber, ICollection<OrderItem> items, OrderStatus status, DateTime createdAt) : base(id, createdAt)
+    public Order(OrderId id, OrderNumber orderNumber, ICollection<ValueObjects.OrderItem> items, OrderStatus status, DateTime createdAt) : base(id, createdAt)
     {
         this.items = items;
         this.Status = status;
@@ -45,7 +44,7 @@ public sealed class Order : Entity<OrderId>, IRoot
 
     }
 
-    public static Result<Order> Create(ICollection<OrderItem> items, OrderStatus status, DateTime createdAt)
+    public static Result<Order> Create(ICollection<ValueObjects.OrderItem> items, OrderStatus status, DateTime createdAt)
     {
 
         if (!items.Any())
@@ -59,7 +58,7 @@ public sealed class Order : Entity<OrderId>, IRoot
 
 
 
-    public void Add(OrderItem item)
+    public void Add(ValueObjects.OrderItem item)
     {
         var product = items.FirstOrDefault(p => p.ProductId == item.ProductId);
         if (product is not null)
@@ -72,7 +71,7 @@ public sealed class Order : Entity<OrderId>, IRoot
     }
 
 
-    public void Remove(OrderItem item)
+    public void Remove(ValueObjects.OrderItem item)
     {
         items.Remove(item);
     }

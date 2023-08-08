@@ -29,8 +29,11 @@ public class OrderRepository : IOrderRepository
         context.SaveChanges();
 
         bus.Advanced.Topics.Publish(
-            OrderingEventNames.OrderCreated, 
-            new OrderCreatedIntegrationEvent(order.Id.Value, order.Items));
+            OrderingEventNames.OrderCreated,
+            new OrderCreatedIntegrationEvent(
+                order.Id.Value, 
+                order.Items.Select(o => 
+                        new OrderItem(o.ProductId, o.Amount)).ToList()));
     }
 
 }
