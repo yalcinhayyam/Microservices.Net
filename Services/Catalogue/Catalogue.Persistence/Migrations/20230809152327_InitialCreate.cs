@@ -18,7 +18,7 @@ namespace Catalogue.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Stock_Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Stock_UnitType = table.Column<int>(type: "int", nullable: false),
+                    Stock_UnitType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

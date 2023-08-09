@@ -7,10 +7,12 @@ using Rebus.Config;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
 using Ordering.Persistence.Models;
-using Contracts.Ordering.ValueObjects;
 using Core.Common.Services;
 using Ordering.Persistence.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using Contracts.Ordering.Events;
+
+using PersistenceOrderItem = Ordering.Persistence.Models.Entities.OrderItem;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +45,7 @@ using (var serviceScope = app.Services.GetService<IServiceScopeFactory>().Create
 
 app.MapGet("/create-order", (IOrderRepository repository, IDateTimeProvider dateTimeProvider, [FromBody] CreateOrderInput input) =>
 {
-    var order = Order.Create(input.OrderItems.ToList(), OrderStatus.Paid, dateTimeProvider.UtcNow);
+    var order = Order.Create(input.OrderItems.Select(oi => PersistenceOrderItem.Create(oi.ProductId, oi.Amount).Value).ToList(), OrderStatus.Paid, dateTimeProvider.UtcNow);
     if (order.IsSuccess is not true)
     {
         return Results.BadRequest(order.Error);
@@ -51,7 +53,7 @@ app.MapGet("/create-order", (IOrderRepository repository, IDateTimeProvider date
     var result = order.Value;
     repository.Create(result);
 
-    return Results.Ok(new CreateOrderPayload(result.OrderNumber.Value, result.Items, result.Status.Name, result.CreatedAt));
+    return Results.Ok(new CreateOrderPayload(result.OrderNumber.Value, result.Items.Select(oi => new OrderItem(oi.ProductId, oi.Quantity)).ToList().AsReadOnly(), result.Status.Name, result.CreatedAt));
 });
 
 

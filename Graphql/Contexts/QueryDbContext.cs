@@ -3,31 +3,42 @@ using Core.Common.Services;
 using Graphql.Models;
 using Microsoft.EntityFrameworkCore;
 
-// namespace Catalogue.Contexts;
+namespace Graphql.Contexts;
 
-public class QueryDbContext : DbContext
+
+public interface IQueryDbContext
 {
-    public DbSet<Product> Products { get; set; }
+    DbSet<Product> Products { get; }
+    DbSet<Order> Orders { get; }
+    DbSet<OrderItem> OrderItems { get; }
+    int SaveChanges();
+}
 
-//     private readonly IConfiguration configuration;
-//     private readonly IDateTimeProvider dateTimeProvider;
-//     public QueryDbContext(IConfiguration configuration, IDateTimeProvider dateTimeProvider)
-//     {
-//         this.configuration = configuration;
-//         this.dateTimeProvider = dateTimeProvider;
-//     }
+public class QueryDbContext : DbContext, IQueryDbContext
+{
+    public DbSet<Product> Products => Set<Product>();
+    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+
+    private readonly IConfiguration configuration;
+    private readonly IDateTimeProvider dateTimeProvider;
+    public QueryDbContext(IConfiguration configuration, IDateTimeProvider dateTimeProvider)
+    {
+        this.configuration = configuration;
+        this.dateTimeProvider = dateTimeProvider;
+    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.EnableSensitiveDataLogging();
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+        // optionsBuilder.EnableSensitiveDataLogging();
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("CommonConnection"));
+        // optionsBuilder.UseInMemoryDatabase("Catalogue");
+
     }
 
-//     protected override void OnModelCreating(ModelBuilder modelBuilder)
-//     {
-//         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-//         // modelBuilder.ApplyConfiguration(new ProductQueryConfiguration());
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-
-//     }
+    }
 }

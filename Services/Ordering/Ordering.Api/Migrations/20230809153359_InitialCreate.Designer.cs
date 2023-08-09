@@ -12,7 +12,7 @@ using Ordering.Contexts;
 namespace Ordering.Api.Migrations
 {
     [DbContext(typeof(OrderingDbContext))]
-    [Migration("20230731175416_InitialCreate")]
+    [Migration("20230809153359_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,6 +24,30 @@ namespace Ordering.Api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Ordering.Persistence.Models.Entities.OrderItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderItems");
+                });
 
             modelBuilder.Entity("Ordering.Persistence.Models.Order", b =>
                 {
@@ -46,33 +70,19 @@ namespace Ordering.Api.Migrations
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("Ordering.Persistence.Models.Entities.OrderItem", b =>
+                {
+                    b.HasOne("Ordering.Persistence.Models.Order", "Order")
+                        .WithMany("Items")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("Ordering.Persistence.Models.Order", b =>
                 {
-                    b.OwnsMany("Contracts.Ordering.ValueObjects.OrderItem", "Items", b1 =>
-                        {
-                            b1.Property<Guid>("OrderId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
-
-                            b1.Property<decimal>("Amount")
-                                .HasColumnType("decimal(18,2)");
-
-                            b1.Property<Guid>("ProductId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.HasKey("OrderId", "Id");
-
-                            b1.ToTable("OrderItem");
-
-                            b1.WithOwner()
-                                .HasForeignKey("OrderId");
-                        });
-
                     b.Navigation("Items");
                 });
 #pragma warning restore 612, 618

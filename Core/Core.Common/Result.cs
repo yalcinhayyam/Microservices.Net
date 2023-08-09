@@ -1,5 +1,33 @@
 namespace Core.Common;
 
+public record Completed(bool Status);
+public class Result
+{
+    private Error? error;
+    private bool status;
+
+    private Result(Error? error, bool status)
+    {
+        this.error = error;
+        this.status = status;
+    }
+
+
+    public static Result FromError(Error error)
+    {
+        return new(error, false);
+    }
+
+    public static implicit operator Result(Error error) => FromError(error);
+    public static implicit operator Result(Completed completed) => new(null, completed.Status || true);
+
+    public static Completed Completed => new(true);
+
+    public bool IsSuccess => status || error == null;
+    public Error Error => !IsSuccess ? error! : throw new Exception($"The result has not a error {GetType().Name}");
+}
+
+
 public class Result<T>
 {
     private T? value;
@@ -18,8 +46,8 @@ public class Result<T>
         return new() { error = error };
     }
 
-    public static implicit operator Result<T>(T value)=> Create(value);
-    public static implicit operator Result<T>(Error error)=> FromError(error);
+    public static implicit operator Result<T>(T value) => Create(value);
+    public static implicit operator Result<T>(Error error) => FromError(error);
 
     public bool IsSuccess => value != null;
     public T Value => IsSuccess ? value! : throw new Exception($"The result value has not a value {typeof(T).Name} {error!.GetType().Name}");

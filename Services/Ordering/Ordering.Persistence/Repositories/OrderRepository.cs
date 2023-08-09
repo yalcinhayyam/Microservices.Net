@@ -3,6 +3,7 @@ using Ordering.Persistence.Abstraction;
 using Ordering.Persistence.Models;
 using Contracts.Ordering;
 using Rebus.Bus;
+using Contracts.Ordering.Events;
 
 namespace Ordering.Persistence.Repositories;
 
@@ -33,7 +34,7 @@ public class OrderRepository : IOrderRepository
             new OrderCreatedIntegrationEvent(
                 order.Id.Value, 
                 order.Items.Select(o => 
-                        new OrderItem(o.ProductId, o.Amount)).ToList()));
+                        new OrderItem(o.ProductId, o.Quantity)).ToList()));
     }
 
 }

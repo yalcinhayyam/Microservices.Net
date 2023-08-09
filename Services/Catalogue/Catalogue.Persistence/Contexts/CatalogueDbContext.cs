@@ -40,7 +40,7 @@ public class CatalogueDbContext : DbContext, ICatalogueDbContext
     {
         optionsBuilder.EnableSensitiveDataLogging();
 
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("CommonConnection"));
         // optionsBuilder.UseInMemoryDatabase("Microservices.Net");
     }
 

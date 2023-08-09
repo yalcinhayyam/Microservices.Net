@@ -3,7 +3,7 @@ using Core.Common.Services;
 using Core.Common;
 using Catalogue.Application.Abstraction.Contexts;
 using Catalogue.Domain.ValueObjects;
-
+using Contracts.Ordering.Events;
 
 namespace Catalogue.Application.Features.Catalogue.Commands.UpdateStock;
 

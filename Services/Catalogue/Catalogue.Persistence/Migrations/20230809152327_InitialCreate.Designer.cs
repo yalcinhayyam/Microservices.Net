@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Catalogue.Persistence.Migrations
 {
     [DbContext(typeof(CatalogueDbContext))]
-    [Migration("20230731143314_InitialCreate")]
+    [Migration("20230809152327_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -90,8 +90,9 @@ namespace Catalogue.Persistence.Migrations
                                 .HasColumnType("decimal(18,2)")
                                 .HasColumnName("Stock_Amount");
 
-                            b1.Property<int>("UnitType")
-                                .HasColumnType("int")
+                            b1.Property<string>("UnitType")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
                                 .HasColumnName("Stock_UnitType");
 
                             b1.HasKey("ProductId");

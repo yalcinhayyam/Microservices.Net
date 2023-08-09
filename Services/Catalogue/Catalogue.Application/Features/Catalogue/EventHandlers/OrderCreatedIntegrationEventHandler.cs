@@ -1,6 +1,7 @@
 using MediatR;
 using Core.EventBus.Abstraction;
 using Catalogue.Application.Features.Catalogue.Commands.UpdateStock;
+using Contracts.Ordering.Events;
 
 public sealed class OrderCreatedIntegrationEventHandler : IIntegrationEventHandler<OrderCreatedIntegrationEvent>
 {

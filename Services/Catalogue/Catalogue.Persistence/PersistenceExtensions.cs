@@ -12,7 +12,7 @@ public static class PersistenceExtensions
 {
     public static IServiceCollection RegisterPersistence(this IServiceCollection services)
     {
-        services.AddDbContext<ICatalogueDbContext,CatalogueDbContext>();
+        services.AddDbContext<ICatalogueDbContext, CatalogueDbContext>();
         services.AddScoped<IProductRepository, ProductRepository>();
         return services;
     }

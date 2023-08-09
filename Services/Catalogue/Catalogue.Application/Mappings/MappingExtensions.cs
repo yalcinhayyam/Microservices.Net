@@ -1,8 +1,9 @@
 using System.Reflection;
 using Mapster;
 using MapsterMapper;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Catalogue.Api.Mappings;
+namespace Catalogue.Application.Mappings;
 
 internal static class MappingExtensions
 {

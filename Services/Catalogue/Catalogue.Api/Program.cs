@@ -3,7 +3,6 @@ using MapsterMapper;
 using MediatR;
 using Core.Common.Services;
 using Catalogue.Persistence.Contexts;
-using Catalogue.Api.Mappings;
 using Core.EventBus;
 using Contracts.Catalogue.Api.CreateProduct;
 using Catalogue.Application.Features.Catalogue.Commands.CreateProduct;
@@ -15,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Rebus.Routing.TypeBased;
 using Contracts.Ordering;
 using Microsoft.EntityFrameworkCore;
+using Contracts.Ordering.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +25,6 @@ var builder = WebApplication.CreateBuilder(args);
     services.RegisterApplicationServices();
     services.RegisterPersistence();
     services.Configure<EventBusOptions>(builder.Configuration.GetSection("EventBusOptions"));
-    services.AddMapping();
     services.AddRebus(
            (configurer, provider) =>
             {
@@ -103,12 +102,6 @@ app.MapGet("/user", (CatalogueDbContext context, IMapper mapper) =>
 app.UseCors("MyPolicy");
 app.Run();
 
-
-
-// app.MapGet("/products-query", (QueryDbContext context, IMapper mapper) =>
-// {
-//     return context.Products.ToList();
-// });
 
 
 
