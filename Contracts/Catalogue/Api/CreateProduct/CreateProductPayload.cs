@@ -3,7 +3,7 @@ using Shared.Common.ValueObjects;
 
 namespace Contracts.Catalogue.Api.CreateProduct;
 
-public sealed record ProductPayloadModel(
+public sealed record CreateProductPayload(
                             Guid Id,
                             string Title,
                             IReadOnlyCollection<MoneyModel> Prices,

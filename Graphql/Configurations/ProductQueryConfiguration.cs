@@ -1,7 +1,7 @@
-using Contracts.Catalogue.Enums;
 using Graphql.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Shared.Common.Enums;
 
 namespace Catalogue.Configurations;
 

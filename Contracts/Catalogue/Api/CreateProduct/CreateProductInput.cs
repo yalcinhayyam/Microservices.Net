@@ -3,7 +3,7 @@ using Shared.Common.ValueObjects;
 
 namespace Contracts.Catalogue.Api.CreateProduct;
 
-public sealed record ProductInputModel(
+public sealed record CreateProductInput(
         string Title,
         ICollection<MoneyModel> Prices,
         UnitType UnitType,

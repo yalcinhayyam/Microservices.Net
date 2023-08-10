@@ -2,7 +2,7 @@ using Shared.Common.Enums;
 using Shared.Common.ValueObjects;
 
 namespace Graphql.Models;
-public class Product
+public class Product //:IOutputType
 {
     public DateTime CreatedAt { get; set; }
     public Guid Id { get; set; }

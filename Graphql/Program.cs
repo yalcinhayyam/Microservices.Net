@@ -10,6 +10,8 @@ using Catalogue.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Shared.Common.Enums;
 using Shared.Common.ValueObjects;
+using HotChocolate.Subscriptions;
+using HotChocolate.Execution;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,11 +24,13 @@ builder.Services
     .AddGraphQLServer()
     .AddQueryType<Query>()
     .AddMutationType<Mutation>()
+    .AddSubscriptionType<Subscription>()
+    .AddInMemorySubscriptions()
     .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = builder.Environment.IsDevelopment())
       .AddProjections()
       .AddSorting()
       .AddFiltering();
-
+//   .AddType<ResponseType<Product,Product>>();
 
 
 
@@ -43,6 +47,7 @@ if (app.Environment.IsDevelopment())
 app.MapGraphQL();
 app.UseHttpsRedirection();
 app.UseAuthorization();
+app.UseWebSockets();
 
 app.MapPost("/", (IQueryDbContext context) =>
 {
@@ -68,7 +73,6 @@ app.MapGet("/", (IQueryDbContext context) =>
     .Include(p => p.OrderItems).SelectMany(p => p.OrderItems.Select(oi => oi.Quantity));
     // return context.Orders.Select(o=> o.Status);//.Include(p => p.OrderItems);
 });
-
 app.Run();
 
 
@@ -88,11 +92,66 @@ public class Query
 }
 public class Mutation
 {
-    public async Task<ProductPayloadModel> AddBook(ProductInputModel model, [Service] ISender madiator, [Service] IMapper mapper)
+    public async Task<CreateProductPayload> AddProduct(CreateProductInput imput, [Service] ISender madiator, [Service] IMapper mapper, [Service] ITopicEventSender sender)
     {
-        var result = await madiator.Send(mapper.Map<CreateProductCommand>(model));
+        var result = await madiator.Send(mapper.Map<CreateProductCommand>(imput));
         if (!result.IsSuccess)
             throw new Exception(result.Error.Message);
-        return mapper.Map<ProductPayloadModel>(result.Value);
+        await sender.SendAsync(nameof(Subscription.ProductCreated), result.Value.Id);
+        return mapper.Map<CreateProductPayload>(result.Value);
+    }
+
+    public async Task<ChatMessage> SendMessage(string clientId, ChatMessage message, [Service] ITopicEventSender sender)
+    {
+        await sender.SendAsync(clientId, message);
+        return message;
     }
 }
+
+public class Subscription
+{
+    [Subscribe]
+    public Guid ProductCreated([EventMessage] Guid id) => id;
+
+    [Subscribe]
+    public async ValueTask<ISourceStream<ChatMessage>> SubscribeToChatMessages(
+            string receiverId,
+            [Service] ITopicEventReceiver receiver, CancellationToken cancellationToken)
+    {
+        return await receiver.SubscribeAsync<ChatMessage>(receiverId, cancellationToken);
+    }
+
+    [Subscribe(With = nameof(SubscribeToChatMessages))]
+    public ChatMessage ChatMessageReceived([EventMessage] ChatMessage message)
+    {
+        return message;
+    }
+}
+
+public class ChatMessage
+{
+    public string value { get; set; }
+}
+
+
+public class Response<T>
+{
+    public string Status { get; set; }
+
+    public T Payload { get; set; }
+}
+
+public class ResponseType<TSchemaType, TRuntimeType>
+    : ObjectType<Response<TRuntimeType>>
+    where TSchemaType : class, IOutputType
+{
+    protected override void Configure(
+        IObjectTypeDescriptor<Response<TRuntimeType>> descriptor)
+    {
+        descriptor.Field(f => f.Status);
+
+        descriptor
+            .Field(f => f.Payload)
+            .Type<TSchemaType>();
+    }
+} 

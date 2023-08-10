@@ -1,6 +1,13 @@
+using Grpc.Core;
+
 namespace Grpc.Services;
-public sealed class ProductService : Product.ProductBase
+internal class ProductService : Product.ProductBase
 {
 
-    public override 
+    public override Task<GetAllProductsReply> Products(GetAllProductsRequest request, ServerCallContext context)
+    {
+        var reply = new GetAllProductsReply() { Title = "Patates" };
+        reply.Prices.AddRange(new Money[] { new Money() { Amount = 20, Currency = Currencies.Tl } });
+        return Task.FromResult(reply);
+    }
 }

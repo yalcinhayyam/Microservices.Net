@@ -14,7 +14,19 @@ public sealed record Money(Currencies CurrencyType, decimal Amount)
 }
 
 
-public sealed class MoneyModel
+#if false
+
+public struct MoneyModel
+{
+    public Currencies CurrencyType { get; set; }
+    public decimal Amount { get; set; }
+}
+
+#endif
+
+
+
+public record MoneyModel()
 {
     public Currencies CurrencyType { get; set; }
     public decimal Amount { get; set; }

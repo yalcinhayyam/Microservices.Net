@@ -1,0 +1,86 @@
+{
+  "message": {
+    "value": "Ok!"
+  },
+  "clientId": "Q2"
+}
+
+mutation SendMessage($clientId: String!, $message: ChatMessageInput!) {
+  sendMessage(clientId: $clientId, message: $message) {
+    value
+  }
+}
+
+
+
+
+subscription ChatMessageReceived($receiverId: String!) {
+  chatMessageReceived(receiverId: $receiverId) {
+    value
+  }
+}
+
+{
+  "receiverId": "Q2"
+}
+
+{
+  "receiverId": "Q1"
+}
+
+
+
+
+{
+  products(first: 10) {
+    nodes {
+      title
+      stockUnit
+      stockAmount
+      prices {
+        amount
+        currencyType
+      }
+      orderItems {
+        quantity
+        order {
+          id
+          orderItems {
+            orderId
+            product {
+              title
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+subscription ProductCreated {
+  productCreated
+}
+
+
+mutation AddProduct($input: CreateProductInput!) {
+  addProduct(imput: $input) {
+    title
+  }
+}
+
+
+{
+   "input": {
+    "title": "Soğan",
+    "unitType": "LITRE",
+    "stockAmount": 150,
+    "prices": [
+      {
+        "amount": 300,
+        "currencyType": "TL"
+      }
+    ]
+  }
+}

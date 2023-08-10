@@ -16,18 +16,18 @@ public class ProductMappingConfig : IRegister
 
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<Product, ProductPayloadModel>()
+        config.NewConfig<Product, CreateProductPayload>()
         .MapWith((src) => new(src.Id.Value, src.Title, src.Prices.Select(p => new MoneyModel() { CurrencyType = p.CurrencyType, Amount = p.Amount }).ToList().AsReadOnly(), (UnitType)src.Stock.UnitType.Id, src.Stock.Amount));
         config.NewConfig<Product, ProductResult>()
          .MapToConstructor(true)
             .ConstructUsing((src) => new ProductResult(src.Id.Value, src.Title, src.Prices.ToList().AsReadOnly(), src.Stock));
 
-        config.NewConfig<ProductInputModel, CreateProductCommand>()
+        config.NewConfig<CreateProductInput, CreateProductCommand>()
          .MapToConstructor(true)
             .ConstructUsing((src) => new(src.Title, src.Prices.Select(p => new Money(p.CurrencyType, p.Amount)).ToList().AsReadOnly(), new(src.StockAmount, Enumeration.FromValue<Domain.Enums.UnitType>((int)src.UnitType))));
 
 
-        config.NewConfig<ProductResult, ProductPayloadModel>()
+        config.NewConfig<ProductResult, CreateProductPayload>()
             .MapWith(
                 (src) => new(src.Id, src.Title,
                 src.Prices.Select(p => new MoneyModel() { CurrencyType = p.CurrencyType, Amount = p.Amount }).ToList().AsReadOnly(), 

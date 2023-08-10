@@ -69,7 +69,7 @@ using (var serviceScope = app.Services.GetService<IServiceScopeFactory>().Create
 
 
 app.MapPost("/products",
-        async (ISender madiator, IMapper mapper, [FromBody] ProductInputModel model) =>
+        async (ISender madiator, IMapper mapper, [FromBody] CreateProductInput model) =>
         {
 
             var result = await madiator.Send(mapper.Map<CreateProductCommand>(model));
@@ -83,7 +83,7 @@ app.MapPost("/products",
 
 app.MapGet("/products", (CatalogueDbContext context, IMapper mapper) =>
 {
-    return context.Products.Select(product => mapper.Map<ProductPayloadModel>(product)).ToList();
+    return context.Products.Select(product => mapper.Map<CreateProductPayload>(product)).ToList();
 });
 
 

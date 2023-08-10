@@ -5,13 +5,29 @@ option csharp_namespace = "Grpc";
 package product;
 
 service Product {
-    rpc Products (ProductsRequest) returns (ProductsReply);
+    rpc Products (GetAllProductsRequest) returns (GetAllProductsReply);
 }
 
-message ProductsRequest {
+message GetAllProductsRequest {
     
 }
 
-message ProductsReply{
+enum Currencies {
+    Tl = 0;
+    Euro = 1;
+    Dollar = 2;
+
+}
+
+message Money {
+    double amount = 1;
+    Currencies Currency = 2;
+
+}
+
+message GetAllProductsReply{
+
     string title = 1;
+    repeated Money prices = 2;
+
 }
