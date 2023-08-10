@@ -1,11 +1,11 @@
-using Contracts.Catalogue.Enums;
-using Contracts.Shared.ValueObjects;
+using Shared.Common.Enums;
+using Shared.Common.ValueObjects;
 
 namespace Contracts.Catalogue.Api.CreateProduct;
 
 public sealed record ProductInputModel(
         string Title,
-        ICollection<Money> Prices,
+        ICollection<MoneyModel> Prices,
         UnitType UnitType,
         decimal StockAmount
     );

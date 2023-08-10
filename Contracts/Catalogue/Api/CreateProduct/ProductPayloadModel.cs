@@ -1,12 +1,11 @@
-
-using Contracts.Catalogue.Enums;
-using Contracts.Shared.ValueObjects;
+using Shared.Common.Enums;
+using Shared.Common.ValueObjects;
 
 namespace Contracts.Catalogue.Api.CreateProduct;
 
 public sealed record ProductPayloadModel(
                             Guid Id,
                             string Title,
-                            IReadOnlyCollection<Money> Prices,
+                            IReadOnlyCollection<MoneyModel> Prices,
                             UnitType UnitType,
                             decimal StockAmount);

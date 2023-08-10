@@ -1,6 +1,5 @@
-
-using Contracts.Catalogue.Enums;
-using Contracts.Shared.ValueObjects;
+using Shared.Common.Enums;
+using Shared.Common.ValueObjects;
 
 namespace Graphql.Models;
 public class Product
@@ -10,7 +9,7 @@ public class Product
     public string Title { get; set; }
     public decimal StockAmount { get; set; }
     public UnitType StockUnit { get; set; }
-    public ICollection<Money> Prices { get; set; }
+    public ICollection<MoneyModel> Prices { get; set; }
     public virtual ICollection<OrderItem> OrderItems { get; set; }
 }
 

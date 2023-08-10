@@ -14,8 +14,6 @@
     <ProjectReference Include="..\Services\Catalogue\Catalogue.Application\Catalogue.Application.csproj" />
     <ProjectReference Include="..\Services\Catalogue\Catalogue.Persistence\Catalogue.Persistence.csproj" />
     <ProjectReference Include="..\Services\Ordering\Ordering.Persistence\Ordering.Persistence.csproj" />
-    <!-- <ProjectReference Include="..\Services\Catalogue\Catalogue.Domain\Catalogue.Domain.csproj" />
-    <ProjectReference Include="..\Services\Catalogue\Catalogue.Infrastructure\Catalogue.Infrastructure.csproj" /> -->
   </ItemGroup>
 
   <ItemGroup>

@@ -4,7 +4,7 @@ option csharp_namespace = "Grpc";
 
 package product;
 
-service Products {
+service Product {
     rpc Products (ProductsRequest) returns (ProductsReply);
 }
 
@@ -13,5 +13,5 @@ message ProductsRequest {
 }
 
 message ProductsReply{
-    string title =1;
+    string title = 1;
 }

@@ -12,3 +12,10 @@ public sealed record Money(Currencies CurrencyType, decimal Amount)
     public static Money operator *(int quantity, Money money) => new(money.CurrencyType, money.Amount * quantity);
     public static Money operator +(Money current, Money other) => current.CurrencyType == other.CurrencyType ? new(current.CurrencyType, current.Amount + other.Amount) : throw new InvalidOperationException("Cannot add money with different currencies.");
 }
+
+
+public sealed class MoneyModel
+{
+    public Currencies CurrencyType { get; set; }
+    public decimal Amount { get; set; }
+}

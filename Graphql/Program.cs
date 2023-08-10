@@ -1,6 +1,5 @@
 using Catalogue.Application.Features.Catalogue.Commands.CreateProduct;
 using Contracts.Catalogue.Api.CreateProduct;
-using Contracts.Catalogue.Enums;
 using Core.Common.Services;
 using Graphql.Contexts;
 using Graphql.Models;
@@ -9,8 +8,8 @@ using MediatR;
 using Catalogue.Application;
 using Catalogue.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Contracts.Shared.ValueObjects;
 using Shared.Common.Enums;
+using Shared.Common.ValueObjects;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,7 +46,7 @@ app.UseAuthorization();
 
 app.MapPost("/", (IQueryDbContext context) =>
 {
-    var product = new Product { Title = "Patates", Id = Guid.NewGuid(), StockAmount = 1000, StockUnit = UnitType.Kg, CreatedAt = DateTime.Now, Prices = new List<Money> { new() { Amount = 100, CurrencyType = Currencies.TL } } };
+    var product = new Product { Title = "Patates", Id = Guid.NewGuid(), StockAmount = 1000, StockUnit = UnitType.Kg, CreatedAt = DateTime.Now, Prices = new List<MoneyModel> { new() { Amount = 100, CurrencyType = Currencies.TL } } };
     context.Products.Add(product);
     context.Orders.Add(new Order
     {

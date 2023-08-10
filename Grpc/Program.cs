@@ -9,5 +9,5 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.MapGrpcService<Prod>();
-
+app.MapGrpcService<ProductService>();
 app.Run();
