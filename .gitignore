@@ -1,6 +1,9 @@
-# Ignore unnecessary files and directories
+    # Ignore unnecessary files and directories
 bin/
 obj/
 .vscode/
 *.log
 *.tmp
+node_modules
+.idea
+.vs

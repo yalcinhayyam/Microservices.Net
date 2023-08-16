@@ -1,0 +1,23 @@
+{
+  "name": "payment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:x": "nodemon --watch src/**/*.ts --exec ts-node src/index.ts",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc -p . "
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "fastify": "^4.21.0",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.10.1",
+    "ts-node": "^10.9.1",
+    "tsyringe": "^4.8.0"
+  }
+}

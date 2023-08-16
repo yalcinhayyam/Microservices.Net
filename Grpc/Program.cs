@@ -42,14 +42,14 @@ app.MapGrpcService<ProductService>();
 app.Run();
 
 
-public sealed class Product
+file sealed class Product
 {
     public string Title { get; set; }
     public ICollection<Money> Prices { get; set; }
 }
 
 #if  structType
-public struct Money
+file struct Money
 {
     public Currencies Currency { get; set; }
     public decimal Amount { get; set; }
@@ -67,7 +67,7 @@ public class Money
 
 # endif 
 
-public enum Currencies
+file enum Currencies
 {
     Tl = 0,
     Euro = 1,
