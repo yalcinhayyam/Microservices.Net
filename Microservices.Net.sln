@@ -37,15 +37,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering.Persistence", "Ser
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{15146187-76B1-444E-B6FC-72018D039184}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{1EEA6D28-07AB-42EF-9716-35FF60E9DEA9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mini", "Mini", "{1EEA6D28-07AB-42EF-9716-35FF60E9DEA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contract", "Test\Contract\Contract.csproj", "{044032F3-0832-413B-AAA4-DD0AB2AD8E07}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contract", "Mini\Contract\Contract.csproj", "{044032F3-0832-413B-AAA4-DD0AB2AD8E07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService", "Test\EmailService\EmailService.csproj", "{98B77524-60E3-40C3-8DBF-864B2DA7D40E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailService", "Mini\EmailService\EmailService.csproj", "{98B77524-60E3-40C3-8DBF-864B2DA7D40E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryService", "Test\InventoryService\InventoryService.csproj", "{8A9EE82F-5657-4A1E-8B37-07899F8F1CCD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryService", "Mini\InventoryService\InventoryService.csproj", "{8A9EE82F-5657-4A1E-8B37-07899F8F1CCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderingService", "Test\OrderingService\OrderingService.csproj", "{164C361B-B5D6-493E-A754-88799F67D354}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderingService", "Mini\OrderingService\OrderingService.csproj", "{164C361B-B5D6-493E-A754-88799F67D354}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
