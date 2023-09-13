@@ -3,9 +3,9 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Catalogue.Application.Mappings;
+namespace Core.Common.Extensions;
 
-internal static class MappingExtensions
+public static class MappingExtensions
 {
     public static IServiceCollection AddMapping(this IServiceCollection services)
     {
