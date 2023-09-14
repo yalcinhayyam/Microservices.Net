@@ -14,7 +14,7 @@ public sealed class ExceptionHandlingMiddleware : IMiddleware
 
     public ExceptionHandlingMiddleware(ILogger<ExceptionHandlingMiddleware> logger)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));    
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
     }
 
@@ -67,15 +67,14 @@ public sealed class ExceptionHandlingMiddleware : IMiddleware
             _ => "Server Error"
         };
 
-    private static IReadOnlyDictionary<string, string[]> GetErrors(Exception exception)
+    private static IReadOnlyDictionary<string, string[]>? GetErrors(Exception exception)
     {
-        IReadOnlyDictionary<string, string[]> errors = null;
 
-        if (exception is ValidationException validationException)
+        if (exception is not ValidationException validationException)
         {
-            errors = validationException.ErrorsDictionary;
+            return null;
         }
+        return validationException.ErrorsDictionary.Value;
 
-        return errors;
     }
 }
