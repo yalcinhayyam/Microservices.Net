@@ -1,3 +1,4 @@
+using Contracts.Catalogue.Enums;
 using Shared.Common.ValueObjects;
 
 namespace Contracts.Catalogue.Api.CreateProduct;

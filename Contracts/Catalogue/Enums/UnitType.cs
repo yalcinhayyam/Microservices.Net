@@ -1,3 +1,4 @@
+namespace Contracts.Catalogue.Enums;
 public enum UnitType
 {
     Kg = 1,
